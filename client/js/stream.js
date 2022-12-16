@@ -18,6 +18,9 @@ const signalOption = {
     offerToReceiveAudio: 1, // 是否傳送聲音流給對方
     offerToReceiveVideo: 1, // 是否傳送影像流給對方
   };
+
+let arr=[]
+let id = arr.sort().join('-');
   
   
   // 將讀取到的設備加入到 select 標籤中
@@ -126,9 +129,7 @@ const signalOption = {
     console.log('add localstream')
     localStream.getTracks().forEach((track) => {
       peer.addTrack(track, localStream);
-      if(track.kind === 'audio'){
 
-      }
       console.log(track)
     });
   //   localStream.getTracks().forEach((track)=>{
@@ -190,6 +191,9 @@ const signalOption = {
   // 監聽 ICE 連接狀態
   function onIceconnectionStateChange() {
     peer.oniceconnectionstatechange = (evt) => {
+      if (evt.target.iceConnectionState === 'disconnected') {
+        remoteVideo.srcObject = null
+      }
       console.log('ICE 伺服器狀態變更 => ', evt.target.iceConnectionState);
     };
   }
@@ -296,11 +300,11 @@ let joinStream =  async() => {
               //    <video autoplay playsinline  id="user-${uid}"></video>
               //    <video autoplay id="user-${uid}-audio" ></video>
               // </div>`
-              let player = `<div class="video__container" id="user-container-${uid}">
-                    <div class="video-player" id="user-${uid}-max">
-                      <video autoplay playsinline  id="user-${uid}"></video>
-                    </div>
-                 </div>`
+    let player = `<div class="video__container" id="user-container-${uid}">
+          <div class="video-player" id="user-${uid}-max">
+            <video autoplay playsinline  id="user-${uid}"></video>
+          </div>
+        </div>`
     // console.log(videoElement)
     // console.log(remoteVideo)
     document.getElementById('streams__container').insertAdjacentHTML('beforeend', player)
@@ -333,11 +337,16 @@ document.getElementById('up-btn').addEventListener('click',()=>{
 // document.getElementById('pull-btn').addEventListener('click', pulling)
 document.getElementById('mic-btn').addEventListener('click',()=>{
   console.log(peer)
+  closeLocalMedia()
   // createSignal(true)
   // streaming()
 })
+function closeLocalMedia() {
+  if (localStream && localStream.getTracks()) {
+    localStream.getTracks().forEach((track) => {
+      track.stop()
+    })
+  }
+  // localStream = null
+}
 
-// closeTrack(trackname, isopen){
-//   this[`${trackName}Tracks`][0].enabled = isOpen
-//   this[`${trackName}Tracks`] = this.localstream[trackName === 'video'? 'getVideoTracks' : 'getAudioTracks']()
-// }
