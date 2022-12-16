@@ -2,9 +2,9 @@
   "name": "socket-chatroom",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "server_new.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server_new.js"
   },
   "keywords": [],
   "author": "",
