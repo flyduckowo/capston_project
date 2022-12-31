@@ -92,9 +92,9 @@ const socketFunc = (process) => {
       socket.disconnect()
     })
   
-    socket.on('message', (room, data) => {
+    socket.on('message', (name, data) => {
       console.log(data)
-      addMessageToDom(displayName,data)
+      addMessageToDom(name,data)
       // console.log(`This is room : ${room} and message is ${data}`)
       // outputArea.scrollTop = outputArea.scrollHeight
       // outputArea.value = outputArea.value + data + '\n'
@@ -170,7 +170,7 @@ inputArea.onkeypress = (event) => {
     // console.log('message'+inputArea.value)
     // data = displayName + ':' + data
     
-    socket.emit('message', room, data)
+    socket.emit('message', room, data, displayName)
     inputArea.value = ''
     // event.preventDefault()
   }
@@ -187,11 +187,16 @@ window.onbeforeunload = function(event) {
       socket.emit('leave', room, socket.id)
       // console.log(socket.id)
 };
-// window.onunload = function(event) {  
-//   // event.returnValue = "我在這寫點東西...";
+// window.addEventListener('unload',async  function(event) {
 //   socket.emit('leave', room, socket.id)
-//   // console.log(socket.id)
-// };
+//   console.log('I am the 3rd one.');
+
+// });
+window.onunload = async function(event) {  
+  // event.returnValue = "我在這寫點東西...";
+  // await socket.emit('leave', room, socket.id)
+  // console.log('456123456',socket.id)
+};
 // window.addEventListener('unload', (event) => {socket.emit('leave', room, socket.id) });
 // $(document).on("submit", "form", function(event){
 //   window.onbeforeunload = null;

@@ -40,8 +40,8 @@ const checkRoomList = (room) => {
 io.sockets.on('connection', (socket) => {
   console.log(socket.id, '已連線')
 
-  socket.on('message', (room, data) => {
-    io.in(room).emit('message', room, data)
+  socket.on('message', (room, data, name) => {
+    io.in(room).emit('message', name, data)
   })
 
   socket.on('create', (room) => {
